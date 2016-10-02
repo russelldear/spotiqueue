@@ -2,6 +2,7 @@
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
+using Spotiqueue.Models;
 using System.Configuration;
 
 namespace Spotiqueue.Services
@@ -26,7 +27,7 @@ namespace Spotiqueue.Services
             {
                 TokenType = token.TokenType,
                 AccessToken = token.AccessToken,
-                UseAuth = false
+                UseAuth = true
             };
         }
 
@@ -35,9 +36,14 @@ namespace Spotiqueue.Services
             return Spotify.GetTrack(trackId);
         }
 
-        public bool Search(string searchText)
+        public FullPlaylist GetPlaylist(string userId, string playlistId)
         {
-            var searchResult = SearchSpotify(searchText);
+            return Spotify.GetPlaylist(userId, playlistId);
+        }
+
+        public bool Search(SearchModel searchModel)
+        {
+            var searchResult = SearchSpotify(searchModel.SearchText);
 
             if (searchResult.Artists.Items.Count > 0)
             {

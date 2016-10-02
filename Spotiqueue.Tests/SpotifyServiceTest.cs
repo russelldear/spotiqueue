@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Spotiqueue.Models;
 using Spotiqueue.Services;
 
 namespace Spotiqueue.Tests
@@ -21,9 +22,21 @@ namespace Spotiqueue.Tests
         {
             var _spotifyService = new SpotifyService();
 
-            var result = _spotifyService.Search("The Cure");
+            var searchModel = new SearchModel("The Cure");
+
+            var result = _spotifyService.Search(searchModel);
 
             Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Can_get_playlist()
+        {
+            var _spotifyService = new SpotifyService();
+
+            var result = _spotifyService.GetPlaylist("russelldear", "34qYAeCQp7Rwmk28IAjXYh");
+
+            Assert.IsNotNull(result);
         }
     }
 }
