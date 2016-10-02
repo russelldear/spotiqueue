@@ -18,18 +18,6 @@ namespace Spotiqueue.Tests
         }
 
         [TestMethod]
-        public void Can_search()
-        {
-            var _spotifyService = new SpotifyService();
-
-            var searchModel = new SearchModel("The Cure");
-
-            var result = _spotifyService.Search(searchModel);
-
-            Assert.IsTrue(result);
-        }
-
-        [TestMethod]
         public void Can_get_playlist()
         {
             var _spotifyService = new SpotifyService();
@@ -37,6 +25,18 @@ namespace Spotiqueue.Tests
             var result = _spotifyService.GetPlaylist("russelldear", "34qYAeCQp7Rwmk28IAjXYh");
 
             Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void Can_search()
+        {
+            var _spotifyService = new SpotifyService();
+
+            var searchModel = new SearchModel("russelldear", "34qYAeCQp7Rwmk28IAjXYh", "The Cure");
+
+            var result = _spotifyService.Search(searchModel);
+
+            Assert.IsTrue(result);
         }
     }
 }

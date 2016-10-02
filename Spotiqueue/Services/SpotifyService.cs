@@ -3,7 +3,9 @@ using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 using Spotiqueue.Models;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace Spotiqueue.Services
 {
@@ -45,9 +47,15 @@ namespace Spotiqueue.Services
         {
             var searchResult = SearchSpotify(searchModel.SearchText);
 
+            var playlist = Spotify.GetPlaylist(searchModel.UserName, searchModel.PlaylistId);
+
+            var tracks = new List<string>();
+
             if (searchResult.Artists.Items.Count > 0)
             {
-                return true;
+                var topTracks = Spotify.GetArtistsTopTracks(searchResult.Artists.Items.First().Id, "NZ");
+                var result = Spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, topTracks.Tracks.Select(t => t.Id).ToList());
+                return result.HasError();
             }
 
             return false;

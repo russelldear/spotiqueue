@@ -2,8 +2,10 @@
 {
     public class SearchModel
     {
-        public SearchModel(string searchText)
+        public SearchModel(string userName, string playlistId, string searchText)
         {
+            UserName = userName;
+            PlaylistId = playlistId;
             SearchText = searchText;
         }
 
@@ -14,5 +16,9 @@
         public bool? SearchAlbums { get; set; }
 
         public bool? SearchSongs { get; set; }
+
+        public string UserName { get; set; }
+
+        public string PlaylistId { get; set; }
     }
 }
