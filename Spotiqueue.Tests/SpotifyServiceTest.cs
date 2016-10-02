@@ -11,7 +11,7 @@ namespace Spotiqueue.Tests
         {
             var _spotifyService = new SpotifyService();
 
-            var result = _spotifyService.GetTrack();
+            var result = _spotifyService.GetTrack("3Hvu1pq89D4R0lyPBoujSv");
 
             Assert.IsNotNull(result);
         }

@@ -30,9 +30,9 @@ namespace Spotiqueue.Services
             };
         }
 
-        public FullTrack GetTrack()
+        public FullTrack GetTrack(string trackId)
         {
-            return Spotify.GetTrack("3Hvu1pq89D4R0lyPBoujSv");
+            return Spotify.GetTrack(trackId);
         }
 
         public bool Search(string searchText)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Spotiqueue.Services;
 using System.Web.Http;
-using Spotiqueue.Services;
 
 namespace Spotiqueue.Controllers
 {
@@ -12,7 +9,7 @@ namespace Spotiqueue.Controllers
         {
             var _spotifyService = new SpotifyService();
 
-            _spotifyService.GetTrack();
+            _spotifyService.Search(searchText);
         }
     }
 }
