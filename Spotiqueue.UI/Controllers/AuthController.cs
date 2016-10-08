@@ -1,6 +1,6 @@
 ﻿using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
-using System.Configuration;
+using Spotiqueue.Shared;
 using System.Web.Mvc;
 
 namespace Spotiqueue.UI.Controllers
@@ -12,18 +12,18 @@ namespace Spotiqueue.UI.Controllers
         {
             var auth = new AutorizationCodeAuth()
             {
-                ClientId = ConfigurationManager.AppSettings["SpotifyClientId"],
-                RedirectUri = ConfigurationManager.AppSettings["RedirectUri"],
+                ClientId = Settings.SpotifyClientId,
+                RedirectUri = Settings.RedirectUri,
                 Scope = Scope.PlaylistModifyPrivate,
             };
 
             var verificationCode = Request.QueryString["code"];
 
-            var token = auth.ExchangeAuthCode(verificationCode, ConfigurationManager.AppSettings["SpotifyClientSecret"]);
+            var token = auth.ExchangeAuthCode(verificationCode, Settings.SpotifyClientSecret);
 
-            var settings = ConfigurationManager.AppSettings["Settings"];
+            var tokenFile = Settings.TokenFile;
 
-            System.IO.File.WriteAllLines(settings, new string[] { token.AccessToken });
+            System.IO.File.WriteAllLines(tokenFile, new string[] { token.AccessToken });
         }
     }
 }

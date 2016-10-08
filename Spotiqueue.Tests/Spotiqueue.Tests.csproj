@@ -61,13 +61,19 @@
     <Compile Include="SpotifyServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Spotiqueue.Shared\Spotiqueue.Shared.csproj">
+      <Project>{7b7cbbd8-ca51-4e43-9107-d66dae0e2e64}</Project>
+      <Name>Spotiqueue.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spotiqueue\Spotiqueue.csproj">
       <Project>{7C927382-E2D0-482E-B33D-E795AFC796DD}</Project>
       <Name>Spotiqueue</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.Example.config" />
     <None Include="app.Live.config" />
     <None Include="packages.config" />

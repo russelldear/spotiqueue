@@ -118,6 +118,7 @@
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="Web.Live.config" />
     <None Include="Web.Example.config" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -125,6 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spotiqueue.Shared\Spotiqueue.Shared.csproj">
+      <Project>{7b7cbbd8-ca51-4e43-9107-d66dae0e2e64}</Project>
+      <Name>Spotiqueue.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

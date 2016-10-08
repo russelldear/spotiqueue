@@ -1,7 +1,7 @@
 ﻿using NLog;
 using SpotifyAPI.Web;
+using Spotiqueue.Shared;
 using System;
-using System.Configuration;
 using System.IO;
 using System.Threading;
 
@@ -10,11 +10,6 @@ namespace Spotiqueue.Services
     public class AuthorisationService
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        private static string Settings = 
-            string.IsNullOrEmpty(ConfigurationManager.AppSettings.Get("Settings"))
-            ? Environment.GetEnvironmentVariable("Settings")
-            : ConfigurationManager.AppSettings.Get("Settings");
 
         private SpotifyWebAPI _spotify;
 
@@ -44,9 +39,9 @@ namespace Spotiqueue.Services
 
         private void Initialise()
         {
-            if (!File.Exists(Settings))
+            if (!File.Exists(Settings.TokenFile))
             {
-                var file = File.Create(Settings);
+                var file = File.Create(Settings.TokenFile);
                 file.Close();
             }
 
@@ -60,9 +55,9 @@ namespace Spotiqueue.Services
         {
             string accessToken;
 
-            StreamReader file = new StreamReader(Settings);
+            StreamReader file = new StreamReader(Settings.TokenFile);
 
-            if (File.Exists(Settings) && (accessToken = file.ReadLine()) != null)
+            if (File.Exists(Settings.TokenFile) && (accessToken = file.ReadLine()) != null)
             {
                 _spotify = new SpotifyWebAPI()
                 {
@@ -94,12 +89,12 @@ namespace Spotiqueue.Services
         private void RenewAccessToken()
         {
             var startTime = DateTime.Now;
-            var lastModified = File.GetLastWriteTime(Settings);
+            var lastModified = File.GetLastWriteTime(Settings.TokenFile);
 
             var auth = new AuthorisationModel()
             {
-                ClientId = ConfigurationManager.AppSettings.Get("SpotifyClientId") ?? Environment.GetEnvironmentVariable("SpotifyClientId"),
-                RedirectUri = ConfigurationManager.AppSettings["RedirectUri"],
+                ClientId = Settings.SpotifyClientId,
+                RedirectUri = Settings.RedirectUri,
                 Scope = "playlist-modify-private",
             };
 
@@ -107,7 +102,7 @@ namespace Spotiqueue.Services
 
             while (lastModified < startTime)
             {
-                lastModified = File.GetLastWriteTime(Settings);
+                lastModified = File.GetLastWriteTime(Settings.TokenFile);
                 Thread.Sleep(1000);
 
                 if (DateTime.Now > startTime.AddSeconds(10))

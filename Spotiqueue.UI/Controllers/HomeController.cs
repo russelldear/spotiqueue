@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using NLog;
+using Spotiqueue.Shared;
 using Spotiqueue.UI.Models;
 using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Web.Mvc;
@@ -25,9 +25,9 @@ namespace Spotiqueue.UI.Controllers
         {
             try
             {
-                var apiUrl = ConfigurationManager.AppSettings["SpotiqueueApiUrl"];
-                var username = ConfigurationManager.AppSettings["SpotiqueueUserName"];
-                var playlistId = ConfigurationManager.AppSettings["SpotiqueuePlaylistId"];
+                var apiUrl = Settings.SpotiqueueApiUrl;
+                var username = Settings.SpotiqueueUserName;
+                var playlistId = Settings.SpotiqueuePlaylistId;
 
                 var searchModel = model.ToSearchModel(username, playlistId);
 
