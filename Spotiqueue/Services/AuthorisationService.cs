@@ -44,7 +44,7 @@ namespace Spotiqueue.Services
 
         private void Initialise()
         {
-            if (!File.Exists("Settings"))
+            if (!File.Exists(Settings))
             {
                 var file = File.Create(Settings);
                 file.Close();
