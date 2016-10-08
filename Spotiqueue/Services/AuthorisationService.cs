@@ -44,6 +44,12 @@ namespace Spotiqueue.Services
 
         private void Initialise()
         {
+            if (!File.Exists("Settings"))
+            {
+                var file = File.Create(Settings);
+                file.Close();
+            }
+
             if (AccessTokenValid())
                 return;
             else
@@ -87,12 +93,6 @@ namespace Spotiqueue.Services
 
         private void RenewAccessToken()
         {
-            if(!File.Exists("Settings"))
-            {
-                var file = File.Create(Settings);
-                file.Close();
-            }
-            
             var startTime = DateTime.Now;
             var lastModified = File.GetLastWriteTime(Settings);
 
