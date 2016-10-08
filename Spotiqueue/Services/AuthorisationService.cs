@@ -10,7 +10,8 @@ namespace Spotiqueue.Services
     public class AuthorisationService
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static string Settings = ConfigurationManager.AppSettings["Settings"];
+        private static string Settings = ConfigurationManager.AppSettings.Get("Settings")
+                                         ?? Environment.GetEnvironmentVariable("Settings");
 
         private SpotifyWebAPI _spotify;
 
@@ -52,7 +53,7 @@ namespace Spotiqueue.Services
 
             StreamReader file = new StreamReader(Settings);
 
-            if ((accessToken = file.ReadLine()) != null)
+            if (File.Exists(Settings) && (accessToken = file.ReadLine()) != null)
             {
                 _spotify = new SpotifyWebAPI()
                 {
@@ -83,6 +84,12 @@ namespace Spotiqueue.Services
 
         private void RenewAccessToken()
         {
+            if(!File.Exists("Settings"))
+            {
+                var file = File.Create(Settings);
+                file.Close();
+            }
+            
             var startTime = DateTime.Now;
             var lastModified = File.GetLastWriteTime(Settings);
 

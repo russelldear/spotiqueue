@@ -3,6 +3,8 @@ environment:
     secure: Xpy+h+EsCwaT/dEtuwQUVJka2iZMCvTpU6xhzu63Ekyz0QJqjP8Invf+D/kn7ubt
   SpotifyClientSecret:
     secure: XxzzP7R4nJlRLcF0q81e8f6hKO5LhP+SVIJBDaW9fCvB8EaugS7IxHxX75KGXRxE
+  Settings:
+    secure: 806CJt0lG8igqzGr/g7n6Q==
   SpotiqueueUserName:
     secure: mI1F7gQznjKQMO2btnoLYg==
   SpotiqueuePlaylistId:
