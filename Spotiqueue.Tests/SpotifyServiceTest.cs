@@ -1,12 +1,22 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Spotiqueue.Models;
 using Spotiqueue.Services;
+using System.Configuration;
 
 namespace Spotiqueue.Tests
 {
     [TestClass]
     public class SpotifyServiceTest
     {
+        private string _username;
+        private string _testPlaylist;
+
+        public SpotifyServiceTest()
+        {
+            _username = ConfigurationManager.AppSettings["SpotiqueueUserName"];
+            _testPlaylist = ConfigurationManager.AppSettings["SpotiqueuePlaylistId"];
+        }
+
         [TestMethod]
         public void Can_get_track()
         {
@@ -18,11 +28,21 @@ namespace Spotiqueue.Tests
         }
 
         [TestMethod]
+        public void Can_get_playlists()
+        {
+            var _spotifyService = new SpotifyService();
+
+            var result = _spotifyService.GetAllPlaylists(_username);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void Can_get_playlist()
         {
             var _spotifyService = new SpotifyService();
 
-            var result = _spotifyService.GetPlaylist("russelldear", "34qYAeCQp7Rwmk28IAjXYh");
+            var result = _spotifyService.GetPlaylist(_username, _testPlaylist);
 
             Assert.IsNotNull(result);
         }
@@ -32,7 +52,7 @@ namespace Spotiqueue.Tests
         {
             var _spotifyService = new SpotifyService();
 
-            var searchModel = new SearchModel("russelldear", "34qYAeCQp7Rwmk28IAjXYh", "The Cure");
+            var searchModel = new SearchModel(_username, _testPlaylist, "The Cure");
 
             var result = _spotifyService.Search(searchModel);
 

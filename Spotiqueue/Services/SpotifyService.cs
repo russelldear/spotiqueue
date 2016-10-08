@@ -25,6 +25,23 @@ namespace Spotiqueue.Services
             return _spotify.GetTrack(trackId);
         }
 
+        public List<SimplePlaylist> GetAllPlaylists(string userId)
+        {
+            var playlists = new List<SimplePlaylist>();
+
+            var playlistPage = _spotify.GetUserPlaylists(userId);
+            
+            playlists.AddRange(playlistPage.Items);
+
+            while (playlistPage.HasNextPage())
+            {
+                playlistPage = _spotify.GetNextPage(playlistPage);
+                playlists.AddRange(playlistPage.Items);
+            }
+
+            return playlists;
+        }
+
         public FullPlaylist GetPlaylist(string userId, string playlistId)
         {
             return _spotify.GetPlaylist(userId, playlistId);

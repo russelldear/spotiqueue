@@ -1,4 +1,5 @@
-﻿using SpotifyAPI.Web;
+﻿using NLog;
+using SpotifyAPI.Web;
 using System;
 using System.Configuration;
 using System.IO;
@@ -8,6 +9,7 @@ namespace Spotiqueue.Services
 {
     public class AuthorisationService
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         private static string Settings = ConfigurationManager.AppSettings["Settings"];
 
         private SpotifyWebAPI _spotify;
@@ -29,6 +31,7 @@ namespace Spotiqueue.Services
             }
             catch (Exception ex)
             {
+                logger.Info(ex, "Failed to authorise");
                 Initialise();
             }
 
@@ -62,10 +65,16 @@ namespace Spotiqueue.Services
 
             try
             {
-                _spotify.GetPrivateProfile();
+                var result = _spotify.GetPrivateProfile();
+
+                if (result.HasError())
+                {
+                    throw new Exception(string.Format("{0} - {1}", result.Error.Status, result.Error.Message));
+                }
             }
             catch (Exception ex)
             {
+                logger.Info(ex, "Current access token is not valid.");
                 return false;
             }
 

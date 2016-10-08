@@ -7,6 +7,8 @@
             UserName = userName;
             PlaylistId = playlistId;
             SearchText = searchText;
+
+            SearchArtists = true; //default to artists only.
         }
 
         public string SearchText { get; set; }
