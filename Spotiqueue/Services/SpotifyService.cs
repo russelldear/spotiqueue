@@ -1,61 +1,48 @@
 ﻿using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 using Spotiqueue.Models;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace Spotiqueue.Services
 {
     public class SpotifyService
     {
-        public static SpotifyWebAPI Spotify { get; set; }
+        private static SpotifyWebAPI _spotify;
 
-        static ClientCredentialsAuth Auth { get; set; }
+        private AuthorisationService _authorisationService;
 
-        static SpotifyService()
+        public SpotifyService()
         {
-            Auth = new ClientCredentialsAuth()
-            {
-                ClientId = ConfigurationManager.AppSettings["SpotifyClientId"],
-                ClientSecret = ConfigurationManager.AppSettings["SpotifyClientSecret"],
-                Scope = Scope.UserReadPrivate,
-            };
-            
-            Token token = Auth.DoAuth();
-            Spotify = new SpotifyWebAPI()
-            {
-                TokenType = token.TokenType,
-                AccessToken = token.AccessToken,
-                UseAuth = true
-            };
-        }
+            _authorisationService = new AuthorisationService();
+
+            _spotify = _authorisationService.Authorise(_spotify);
+        }        
 
         public FullTrack GetTrack(string trackId)
         {
-            return Spotify.GetTrack(trackId);
+            return _spotify.GetTrack(trackId);
         }
 
         public FullPlaylist GetPlaylist(string userId, string playlistId)
         {
-            return Spotify.GetPlaylist(userId, playlistId);
+            return _spotify.GetPlaylist(userId, playlistId);
         }
 
         public bool Search(SearchModel searchModel)
         {
             var searchResult = SearchSpotify(searchModel.SearchText);
 
-            var playlist = Spotify.GetPlaylist(searchModel.UserName, searchModel.PlaylistId);
+            var playlist = _spotify.GetPlaylist(searchModel.UserName, searchModel.PlaylistId);
 
             var tracks = new List<string>();
 
             if (searchResult.Artists.Items.Count > 0)
             {
-                var topTracks = Spotify.GetArtistsTopTracks(searchResult.Artists.Items.First().Id, "NZ");
-                var result = Spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, topTracks.Tracks.Select(t => t.Id).ToList());
-                return result.HasError();
+                var topTracks = _spotify.GetArtistsTopTracks(searchResult.Artists.Items.First().Id, "NZ");
+                var result = _spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, topTracks.Tracks.Select(t => t.Uri).ToList());
+                return !result.HasError();
             }
 
             return false;
@@ -63,7 +50,7 @@ namespace Spotiqueue.Services
 
         private SearchItem SearchSpotify(string searchText)
         {
-            return Spotify.SearchItems(searchText, SearchType.All);
+            return _spotify.SearchItems(searchText, SearchType.All);
         }
     }
 }
