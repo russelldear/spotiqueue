@@ -89,7 +89,7 @@ namespace Spotiqueue.Services
             var auth = new AuthorisationModel()
             {
                 ClientId = ConfigurationManager.AppSettings["SpotifyClientId"],
-                RedirectUri = "http://localhost/Spotiqueue.UI/Auth",
+                RedirectUri = ConfigurationManager.AppSettings["RedirectUri"],
                 Scope = "playlist-modify-private",
             };
 
@@ -100,7 +100,7 @@ namespace Spotiqueue.Services
                 lastModified = File.GetLastWriteTime(Settings);
                 Thread.Sleep(1000);
 
-                if (DateTime.Now > startTime.AddSeconds(60))
+                if (DateTime.Now > startTime.AddSeconds(10))
                 {
                     throw new Exception("Timed out waiting for updated access token.");
                 }

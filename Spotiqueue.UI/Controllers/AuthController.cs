@@ -13,7 +13,7 @@ namespace Spotiqueue.UI.Controllers
             var auth = new AutorizationCodeAuth()
             {
                 ClientId = ConfigurationManager.AppSettings["SpotifyClientId"],
-                RedirectUri = "http://localhost/Spotiqueue.UI/Auth",
+                RedirectUri = ConfigurationManager.AppSettings["RedirectUri"],
                 Scope = Scope.PlaylistModifyPrivate,
             };
 

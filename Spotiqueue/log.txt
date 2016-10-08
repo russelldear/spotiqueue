@@ -1,0 +1,3 @@
+2016-10-08 05:33:48.6021|INFO|Spotiqueue.Services.AuthorisationService|Current access token is not valid.
+2016-10-08 05:34:48.6858|INFO|Spotiqueue.Services.AuthorisationService|Failed to authorise
+2016-10-08 05:34:48.7628|INFO|Spotiqueue.Services.AuthorisationService|Current access token is not valid.

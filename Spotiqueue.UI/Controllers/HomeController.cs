@@ -15,7 +15,9 @@ namespace Spotiqueue.UI.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var defaultModel = new QueueModel { SearchArtists = true };
+
+            return View(defaultModel);
         }
 
         [HttpPost]
