@@ -88,7 +88,7 @@ namespace Spotiqueue.Services
 
             var auth = new AuthorisationModel()
             {
-                ClientId = ConfigurationManager.AppSettings["SpotifyClientId"],
+                ClientId = ConfigurationManager.AppSettings.Get("SpotifyClientId") ?? Environment.GetEnvironmentVariable("SpotifyClientId"),
                 RedirectUri = ConfigurationManager.AppSettings["RedirectUri"],
                 Scope = "playlist-modify-private",
             };
