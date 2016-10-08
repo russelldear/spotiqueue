@@ -23,4 +23,4 @@ deploy:
     website: XeroNet/Spotiqueue.UI/
     username: Administrator
     password:
-		secure: gVAoe0mWXEfeECWVQ+HjOA==
+        secure: gVAoe0mWXEfeECWVQ+HjOA==
