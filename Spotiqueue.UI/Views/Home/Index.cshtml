@@ -3,5 +3,20 @@
 }
 
 <div class="jumbotron">
-    
+    @model Spotiqueue.UI.Models.QueueModel
+    @using (Html.BeginForm("Queue", "Home", FormMethod.Post))
+    {
+        @Html.TextBoxFor(m => m.SearchText)
+
+        <div>
+            @Html.CheckBoxFor(m => m.SearchArtists, true)
+            @Html.LabelFor(m => m.SearchArtists)
+            @Html.CheckBoxFor(m => m.SearchAlbums, false)
+            @Html.LabelFor(m => m.SearchAlbums)
+            @Html.CheckBoxFor(m => m.SearchSongs, false)
+            @Html.LabelFor(m => m.SearchSongs)
+        </div>
+
+        <input type="submit">
+    }
 </div>

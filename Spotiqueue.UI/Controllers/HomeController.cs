@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Newtonsoft.Json;
+using Spotiqueue.UI.Models;
+using System.Configuration;
+using System.IO;
+using System.Net;
 using System.Web.Mvc;
 
 namespace Spotiqueue.UI.Controllers
@@ -14,9 +15,32 @@ namespace Spotiqueue.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Queue()
+        public ActionResult Queue(QueueModel model)
         {
-            return View();
+            var apiUrl = ConfigurationManager.AppSettings["SpotiqueueApiUrl"];
+            var username = ConfigurationManager.AppSettings["SpotiqueueUserName"];
+            var playlistId = ConfigurationManager.AppSettings["SpotiqueuePlaylistId"];
+
+            var searchModel = model.ToSearchModel(username, playlistId);
+
+            var request = (HttpWebRequest)WebRequest.Create(apiUrl);
+
+            request.Method = "POST";
+            request.ContentType = "application/json";
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                var json = JsonConvert.SerializeObject(searchModel);
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+
+            var response = (HttpWebResponse)request.GetResponse();
+
+            return View("Index");
         }
     }
 }

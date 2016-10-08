@@ -1,7 +1,6 @@
-﻿using Spotiqueue.Services;
+﻿using Spotiqueue.Models;
+using Spotiqueue.Services;
 using System.Web.Http;
-using System;
-using Spotiqueue.Models;
 
 namespace Spotiqueue.Controllers
 {

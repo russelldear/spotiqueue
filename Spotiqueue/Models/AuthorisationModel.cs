@@ -1,6 +1,4 @@
-﻿using SpotifyAPI.Web.Enums;
-using System.Diagnostics;
-using System.Net;
+﻿using System.Diagnostics;
 using System.Text;
 namespace Spotiqueue.Services
 {

@@ -11,11 +11,11 @@
 
         public string SearchText { get; set; }
 
-        public bool? SearchArtists { get; set; }
+        public bool SearchArtists { get; set; }
 
-        public bool? SearchAlbums { get; set; }
+        public bool SearchAlbums { get; set; }
 
-        public bool? SearchSongs { get; set; }
+        public bool SearchSongs { get; set; }
 
         public string UserName { get; set; }
 

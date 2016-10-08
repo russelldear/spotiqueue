@@ -32,20 +32,38 @@ namespace Spotiqueue.Services
 
         public bool Search(SearchModel searchModel)
         {
+            var result = true;
+
             var searchResult = SearchSpotify(searchModel.SearchText);
 
             var playlist = _spotify.GetPlaylist(searchModel.UserName, searchModel.PlaylistId);
 
             var tracks = new List<string>();
 
-            if (searchResult.Artists.Items.Count > 0)
+            if (searchModel.SearchArtists && searchResult.Artists.Items.Count > 0)
             {
                 var topTracks = _spotify.GetArtistsTopTracks(searchResult.Artists.Items.First().Id, "NZ");
-                var result = _spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, topTracks.Tracks.Select(t => t.Uri).ToList());
-                return !result.HasError();
+                var response = _spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, topTracks.Tracks.Select(t => t.Uri).ToList());
+
+                result = result && !response.HasError();
             }
 
-            return false;
+            if (searchModel.SearchAlbums && searchResult.Albums.Items.Count > 0)
+            {
+                var albumTracks = _spotify.GetAlbumTracks(searchResult.Albums.Items.First().Id);
+                var response = _spotify.AddPlaylistTracks(searchModel.UserName, playlist.Id, albumTracks.Items.Select(t => t.Uri).ToList());
+
+                result = result && !response.HasError();
+            }
+
+            if (searchModel.SearchSongs && searchResult.Tracks.Items.Count > 0)
+            {
+                var response = _spotify.AddPlaylistTrack(searchModel.UserName, playlist.Id, searchResult.Tracks.Items.First().Uri);
+
+                result = result && !response.HasError();
+            }
+
+            return result;
         }
 
         private SearchItem SearchSpotify(string searchText)

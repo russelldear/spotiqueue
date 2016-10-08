@@ -1,5 +1,5 @@
-﻿using System;
-using SpotifyAPI.Web;
+﻿using SpotifyAPI.Web;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Threading;

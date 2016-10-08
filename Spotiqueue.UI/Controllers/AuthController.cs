@@ -1,9 +1,7 @@
-﻿using System.Web.Mvc;
-using SpotifyAPI.Web;
-using SpotifyAPI.Web.Auth;
+﻿using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
-using SpotifyAPI.Web.Models;
 using System.Configuration;
+using System.Web.Mvc;
 
 namespace Spotiqueue.UI.Controllers
 {
