@@ -47,12 +47,23 @@ namespace Spotiqueue.UI.Controllers
 
                 var response = (HttpWebResponse)request.GetResponse();
 
-                return View("Index");
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    model.Result = true;
+                    return View("Index", model);
+                }
+                else
+                {
+                    model.Result = false;
+                    logger.Error(string.Format("Search request failed: {0} - {1}", response.StatusCode, response.StatusDescription));
+                    return View("Index", model);
+                }
             }
             catch (Exception ex)
             {
+                model.Result = false;
                 logger.Error(ex, "Search request failed.");
-                return View("Index");
+                return View("Index", model);
             }
         }
     }
