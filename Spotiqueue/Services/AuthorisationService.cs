@@ -10,8 +10,11 @@ namespace Spotiqueue.Services
     public class AuthorisationService
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
-        private static string Settings = ConfigurationManager.AppSettings.Get("Settings")
-                                         ?? Environment.GetEnvironmentVariable("Settings");
+
+        private static string Settings = 
+            string.IsNullOrEmpty(ConfigurationManager.AppSettings.Get("Settings"))
+            ? Environment.GetEnvironmentVariable("Settings")
+            : ConfigurationManager.AppSettings.Get("Settings");
 
         private SpotifyWebAPI _spotify;
 
