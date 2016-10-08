@@ -11,6 +11,8 @@ environment:
     secure: VjF44977tf2j4+QdpVJRiFlXClPuHQEOU6LnXIrwaAU=
 before_build:
   - nuget restore
+build: 
+  publish_wap: true
 test:
   categories:
     only: 
