@@ -11,3 +11,7 @@ environment:
     secure: VjF44977tf2j4+QdpVJRiFlXClPuHQEOU6LnXIrwaAU=
 before_build:
   - nuget restore
+test:
+  categories:
+    only: 
+      - Unit

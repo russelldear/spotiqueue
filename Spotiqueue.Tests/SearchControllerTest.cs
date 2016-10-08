@@ -5,7 +5,7 @@ namespace Spotiqueue.Tests
     [TestClass]
     public class SearchControllerTest
     {
-        [TestMethod]
+        [TestMethod, TestCategory("Unit")]
         public void TestMethod1()
         {
         }
