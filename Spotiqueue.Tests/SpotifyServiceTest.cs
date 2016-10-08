@@ -14,8 +14,10 @@ namespace Spotiqueue.Tests
 
         public SpotifyServiceTest()
         {
-            _username = ConfigurationManager.AppSettings.Get("SpotiqueueUserName") ?? Environment.GetEnvironmentVariable("SpotiqueueUserName");
-            _testPlaylist = ConfigurationManager.AppSettings.Get("SpotiqueuePlaylistId") ?? Environment.GetEnvironmentVariable("SpotiqueuePlaylistId");
+            _username = ConfigurationManager.AppSettings.Get("SpotiqueueUserName") 
+                        ?? Environment.GetEnvironmentVariable("SpotiqueueUserName");
+            _testPlaylist = ConfigurationManager.AppSettings.Get("SpotiqueuePlaylistId") 
+                            ?? Environment.GetEnvironmentVariable("SpotiqueuePlaylistId");
         }
 
         [TestMethod]
