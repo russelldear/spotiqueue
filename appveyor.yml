@@ -15,3 +15,9 @@ test:
   categories:
     only: 
       - Unit
+deploy:
+  - provider: WebDeploy
+    server: ec2-52-38-44-244.us-west-2.compute.amazonaws.com
+    website: XeroNet/Spotiqueue.UI/
+    username: Administrator
+    password: HM.RUbg(D2&
