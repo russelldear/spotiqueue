@@ -13,10 +13,9 @@ namespace Spotiqueue.UI.Controllers
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public ActionResult Index()
+        public ActionResult Index(bool? success)
         {
-            var defaultModel = new QueueModel { SearchArtists = true };
-
+            var defaultModel = new QueueModel { SearchArtists = true, Result = success };
             return View(defaultModel);
         }
 
@@ -50,6 +49,7 @@ namespace Spotiqueue.UI.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     model.Result = true;
+                    return RedirectToAction("Index", new { success = true });
                     return View("Index", model);
                 }
                 else
