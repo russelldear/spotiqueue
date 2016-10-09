@@ -2,6 +2,7 @@
 using SpotifyAPI.Web.Enums;
 using SpotifyAPI.Web.Models;
 using Spotiqueue.Models;
+using Spotiqueue.Shared.Services;
 using System.Collections.Generic;
 using System.Linq;
 

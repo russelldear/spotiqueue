@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
-namespace Spotiqueue.Services
+
+namespace Spotiqueue.Shared.Services
 {
     public class AuthorisationModel
     {

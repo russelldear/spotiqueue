@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace Spotiqueue.Services
+namespace Spotiqueue.Shared.Services
 {
     public class AuthorisationService
     {
