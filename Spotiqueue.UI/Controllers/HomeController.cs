@@ -50,20 +50,19 @@ namespace Spotiqueue.UI.Controllers
                 {
                     model.Result = true;
                     return RedirectToAction("Index", new { success = true });
-                    return View("Index", model);
                 }
                 else
                 {
                     model.Result = false;
                     logger.Error(string.Format("Search request failed: {0} - {1}", response.StatusCode, response.StatusDescription));
-                    return View("Index", model);
+                    return RedirectToAction("Index", new { success = false });
                 }
             }
             catch (Exception ex)
             {
                 model.Result = false;
-                logger.Error(ex, "Search request failed.");
-                return View("Index", model);
+                logger.Error(ex, "Search request failed - " + ex.StackTrace);
+                return RedirectToAction("Index", new { success = false });
             }
         }
     }
