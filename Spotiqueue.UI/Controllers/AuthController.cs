@@ -23,7 +23,7 @@ namespace Spotiqueue.UI.Controllers
 
             var tokenFile = Settings.TokenFile;
 
-            System.IO.File.WriteAllLines(tokenFile, new string[] { token.AccessToken });
+            System.IO.File.WriteAllLines(tokenFile, new string[] { token.RefreshToken });
         }
     }
 }

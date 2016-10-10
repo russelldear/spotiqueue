@@ -1,5 +1,7 @@
 ﻿using NLog;
 using SpotifyAPI.Web;
+using SpotifyAPI.Web.Auth;
+using SpotifyAPI.Web.Enums;
 using Spotiqueue.Shared;
 using System;
 using System.IO;
@@ -12,6 +14,8 @@ namespace Spotiqueue.Shared.Services
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
         private SpotifyWebAPI _spotify;
+
+        private string _accessToken;
 
         public SpotifyWebAPI Authorise(SpotifyWebAPI spotify)
         {
@@ -30,7 +34,7 @@ namespace Spotiqueue.Shared.Services
             }
             catch (Exception ex)
             {
-                logger.Info(ex, "Failed to authorise");
+                logger.Error(ex, "Failed to authorise - " + ex.Message + ex.StackTrace);
                 Initialise();
             }
 
@@ -53,33 +57,26 @@ namespace Spotiqueue.Shared.Services
 
         private bool AccessTokenValid()
         {
-            string accessToken;
-
-            StreamReader file = new StreamReader(Settings.TokenFile);
-
-            if (File.Exists(Settings.TokenFile) && (accessToken = file.ReadLine()) != null)
+            try
             {
                 _spotify = new SpotifyWebAPI()
                 {
                     TokenType = "Bearer",
-                    AccessToken = accessToken
+                    AccessToken = _accessToken
                 };
-            }
 
-            file.Close();
-
-            try
-            {
                 var result = _spotify.GetPrivateProfile();
 
                 if (result.HasError())
                 {
-                    throw new Exception(string.Format("{0} - {1}", result.Error.Status, result.Error.Message));
+                    var error = string.Format("{0} - {1}", result.Error.Status, result.Error.Message);
+                    logger.Error(error);
+                    throw new Exception(error);
                 }
             }
             catch (Exception ex)
             {
-                logger.Info(ex, "Current access token is not valid.");
+                logger.Error(ex, "Current access token is not valid - " + ex.Message + ex.StackTrace);
                 return false;
             }
 
@@ -88,28 +85,46 @@ namespace Spotiqueue.Shared.Services
 
         private void RenewAccessToken()
         {
-            var startTime = DateTime.Now;
-            var lastModified = File.GetLastWriteTime(Settings.TokenFile);
+            StreamReader file = new StreamReader(Settings.TokenFile);
+            var refreshToken = file.ReadLine();
+            file.Close();
 
-            var auth = new AuthorisationModel()
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                var startTime = DateTime.Now;
+                var lastModified = File.GetLastWriteTime(Settings.TokenFile);
+
+                var auth = new AuthorisationModel()
+                {
+                    ClientId = Settings.SpotifyClientId,
+                    RedirectUri = Settings.RedirectUri,
+                    Scope = "playlist-modify-private",
+                };
+
+                auth.DoAuth();
+
+                while (lastModified < startTime)
+                {
+                    lastModified = File.GetLastWriteTime(Settings.TokenFile);
+                    Thread.Sleep(1000);
+
+                    if (DateTime.Now > startTime.AddSeconds(10))
+                    {
+                        throw new Exception("Timed out waiting for updated access token.");
+                    }
+                }
+            }
+            
+            var webAuth = new AutorizationCodeAuth()
             {
                 ClientId = Settings.SpotifyClientId,
                 RedirectUri = Settings.RedirectUri,
-                Scope = "playlist-modify-private",
+                Scope = Scope.PlaylistModifyPrivate,
             };
 
-            auth.DoAuth();
+            var token = webAuth.RefreshToken(refreshToken, Settings.SpotifyClientSecret);
 
-            while (lastModified < startTime)
-            {
-                lastModified = File.GetLastWriteTime(Settings.TokenFile);
-                Thread.Sleep(1000);
-
-                if (DateTime.Now > startTime.AddSeconds(10))
-                {
-                    throw new Exception("Timed out waiting for updated access token.");
-                }
-            }
+            _accessToken = token.AccessToken;
 
             if (!AccessTokenValid())
             {
